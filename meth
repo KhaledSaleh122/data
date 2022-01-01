@@ -1,0 +1,117 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package trainmed;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+
+/**
+ *
+ * @author khale
+ */
+public class Trainmed {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        Queue<Integer> s = new LinkedList<>();
+        s.add(1);
+        s.add(0);
+        s.add(2);
+        s.add(0);
+        s.add(2);
+        frq(s);
+        System.out.println(s);
+    }
+
+    public static void frq(Queue<Integer> s) {
+        //HashMap<Integer,Integer> s1 = new HashMap<>();
+        ArrayList<Integer> s1 = new ArrayList<>();
+        ArrayList<Integer> s2 = new ArrayList<>();
+        for (int i = 0; i < s.size(); i++) {
+            int counter = 0;
+            boolean have = false;
+            int value = s.remove();
+            for (int j = 0; j < s.size(); j++) {
+                int value2 = s.remove();
+                if (value == value2) {
+                    counter++;
+                }
+                s.add(value2);
+            }
+            //s1.put(value, counter);
+            for (int k = 0; k < s1.size(); k++) {
+                if (value == s1.get(k)) {
+                    have = true;
+                }
+            }
+            if (!have) {
+                s1.add(value);
+                s2.add(counter);
+            }
+             s.add(value);
+        }
+         System.out.println(s1);
+         System.out.println(s2);
+    }
+
+    public static void revQ(Queue<Integer> s) {
+        if (!s.isEmpty()) {
+            int value = s.remove();
+            revQ(s);
+            s.add(value);
+        }
+    }
+
+    public static void revQ2(MLinkedQueue s, int k) { //
+        if (k > s.size() || k < 2) {
+            return;
+        }
+        helperQueRev(s, k - 1);
+    }
+
+    public static void helperQueRev(MLinkedQueue s, int k) {
+        if (k >= 0) {
+            int value = s.dequeue();
+            helperQueRev(s, k - 1);
+            s.enqueueX(k, value);
+        }
+    }
+
+    public static void sortQ(Queue<Integer> s) {
+        if (!s.isEmpty()) {
+            int value = s.remove();
+            sortQ(s);
+            helperSort(s, value);
+        }
+    }
+
+    public static void helperSort(Queue<Integer> s, int value) {
+        if (s.isEmpty()) {
+            s.add(value);
+            return;
+        }
+        boolean found = false;
+
+        for (int i = 0; i < s.size(); i++) {
+            int v2 = s.remove();
+            if (v2 < value) {
+                s.add(v2);
+
+            } else {
+                if (!found) {
+                    s.add(value);
+                    i++;
+                }
+                s.add(v2);
+                found = true;
+            }
+        }
+    }
+}
