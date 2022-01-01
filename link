@@ -1,0 +1,296 @@
+public class LinkedList {
+
+    private Node head;
+    private Node tail;
+    private int size = 0;
+
+    public void addFirst(Integer data) {
+        if (head == null) {
+            Node temp = new Node(data);
+            head = tail = temp;
+        } else {
+            Node temp = new Node(data);
+            temp.setNext(head);
+            head = temp;
+        }
+        size++;
+    }
+
+    public Integer removeFirst() {
+        if (head == null) {
+            throw new ArrayIndexOutOfBoundsException("There is No Data Size = 0");
+        }
+        Integer temp = head.getData();
+        if (head.getNext() == null) {
+            head = tail = null;
+        } else {
+            head = head.getNext();
+        }
+        size--;
+        return temp;
+    }
+
+    public void addLast(Integer data) {
+        if (head == null) {
+            addFirst(data);
+        } else {
+            Node temp = new Node(data);
+            tail.setNext(temp);
+            tail = temp;
+            size++;
+        }
+    }
+
+    public Integer removeLast() {
+        if (head == null) {
+            throw new ArrayIndexOutOfBoundsException("There is No Data Size = 0");
+        }
+        Integer temp = tail.getData();
+        if (head.getNext() == null) {
+            head = tail = null;
+        } else {
+            Node cur = head;
+            while (cur.getNext().getNext() != null) {
+                cur = cur.getNext();
+            }
+            cur.setNext(null);
+            tail = cur;
+        }
+        size--;
+        return temp;
+    }
+
+    public void addByIndex(int i, Integer data) {
+        if (i < 1 || i > size + 1) {
+            throw new ArrayIndexOutOfBoundsException("index = " + i);
+        }
+        if (i == 1) {
+            addFirst(data);
+        } else if (i == size + 1) {
+            addLast(data);
+        } else {
+            Node cur = head;
+            for (int j = 1; j < i - 1; j++) {
+                cur = cur.getNext();
+            }
+            Node temp = new Node(data);
+            temp.setNext(cur.getNext());
+            cur.setNext(temp);
+            size++;
+        }
+
+    }
+
+    public void removeByIndex(int i) {
+        if (i < 1 || i > size) {
+            throw new ArrayIndexOutOfBoundsException("index = " + i);
+        }
+        if (i == 1) {
+            removeFirst();
+        } else if (i == size) {
+            removeLast();
+        } else {
+            Node cur = head;
+            for (int j = 1; j < i - 1; j++) {
+                cur = cur.getNext();
+            }
+            cur.setNext(cur.getNext().getNext());
+            size--;
+        }
+
+    }
+
+    public void mid() {
+        Node s = head;
+        Node f = head;
+        while (f != null && f.getNext() != null) {
+            s = s.getNext();
+            f = f.getNext().getNext();
+        }
+        System.out.println(s.getData());
+    }
+
+    public void shifting(int times) {
+        if (times > 0) {
+            Node cur = head;
+            while (cur.getNext().getNext() != null) {
+                cur = cur.getNext();
+            }
+            cur.setNext(null);
+            tail.setNext(head);
+            head = tail;
+            tail = cur;
+            shifting(times - 1);
+        }
+    }
+
+    @Override
+    public String toString() {
+        String s = "[";
+        Node cur = head;
+        if (head == null) {
+            return "No Data";
+        }
+        for (int i = 1; i <= size; i++) {
+            s = s + cur.getData() + ",";
+            cur = cur.getNext();
+        }
+        return s.substring(0, s.length() - 1) + "]";
+    }
+
+    public void keep(Node head) {
+        Node cur = head;
+        Node pointer = head;
+        int counter1 = 1;
+        int counter2 = 1;
+        while (cur != null) {
+            pointer = cur.getNext();
+            counter2 = counter1 + 1;
+            while (pointer != null) {
+                if (cur.getData().equals(pointer.getData())) {
+                    removeBy(counter2, head);
+                    counter2--;
+                }
+                counter2++;
+                pointer = pointer.getNext();
+            }
+            cur = cur.getNext();
+            counter1++;
+        }
+    }
+public void rotaion(){
+        Node cur;
+        cur = head;
+        while(cur.getNext() !=tail){ //1 2 3 
+            cur=cur.getNext();
+        }
+        tail.setNext(head); // 1 2 3- > 1
+        head=tail;
+        tail=cur;
+    }
+    public boolean removeBy(int index, Node head) {
+        if (index == 1) {
+            if (head.getNext() == null) {
+                this.head = tail = null;
+            } else {
+                this.head = head.getNext();
+                size--;
+            }
+        } else {
+            if (head.getNext() == null) {
+                this.head = tail = null;
+            } else {
+                Node cur = head;
+                for(int i = 1 ; i < index - 1;i++){
+                    cur = cur.getNext();
+                }
+                if(cur.getNext().getNext() == null){
+                    tail = cur;
+                    cur.setNext(cur.getNext().getNext());
+                }else{
+                    cur.setNext(cur.getNext().getNext());
+                }
+                size--;
+            }
+        }
+        return true;
+    }
+
+
+
+    public  void swapDuplicates(Node head){
+        Node cur = head;
+        Node fd = head;
+        Node ld = head;
+        boolean Found = false;
+        while(cur.getNext() != null){
+            Node cur2 = cur.getNext();
+            while(cur2 != null){
+                if(cur2.getData().equals(cur.getData())){
+                    fd = cur;
+                    ld = cur2;
+                    Found = true;
+                    break;
+                }
+                cur2 = cur2.getNext();
+            }
+            if(Found){
+                break;
+            }
+            cur = cur.getNext();
+        }
+        cur = head;
+        while(cur != null){
+            if(cur.getNext() == fd || cur.getNext() == ld){
+                System.out.println(cur.getData());
+                cur.setNext(cur.getNext().getNext());
+            }
+            cur = cur.getNext();
+        }
+        if(fd != head){
+        fd.setNext(head);
+        this.head = fd;
+        }
+        if(ld != tail){
+        tail.setNext(ld);
+        ld.setNext(null);
+        }
+    }
+
+    public Node getTail() {
+        return tail;
+    }
+
+    public void setTail(Node tail) {
+        this.tail = tail;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public Node getHead() {
+        return head;
+    }
+
+    public void setHead(Node head) {
+        this.head = head;
+    }
+    public static void main(String[] args) {
+        LinkedList list = new LinkedList();
+        list.addLast(1);
+        list.addLast(0);
+        list.addLast(0);
+        list.addLast(2);
+        LinkedList list1 = new LinkedList();
+        list1.addLast(0);
+        list1.addLast(2);
+    }
+    public static LinkedList merge(Node head1,Node head2){
+        Node cur1 = head1;
+        Node cur2 = head2;
+        LinkedList s = new LinkedList(); 
+        while(cur1 != null && cur2 != null){
+            if(cur1.getData() > cur2.getData()){
+                s.addLast(cur2.getData());
+                cur2 = cur2.getNext();
+            }else{
+                s.addLast(cur1.getData());
+                cur1 = cur1.getNext();
+            }
+        }
+        while(cur1 != null){
+            s.addLast(cur1.getData());
+            cur1 = cur1.getNext();
+        }
+        while(cur2 != null){
+            s.addLast(cur2.getData());
+            cur2 = cur2.getNext();
+        }
+        return s;
+    }
+}
