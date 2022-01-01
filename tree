@@ -1,0 +1,196 @@
+public class BST<T extends Comparable<T>> {
+
+    Node<T> root;
+
+    void add(T data) {
+        if (root == null) {
+            root = new Node<>(data);
+        } else {
+            add(root, data);
+        }
+    }
+
+    void add(Node<T> root, T data) {
+        if (data.compareTo(root.data) > 0) {
+            if (root.right == null) {
+                root.right = new Node<>(data);
+            } else {
+                add(root.right, data);
+            }
+        } else if (data.compareTo(root.data) < 0) {
+            if (root.left == null) {
+                root.left = new Node<>(data);
+            } else {
+                add(root.left, data);
+            }
+        }
+    }
+
+    boolean search(T data) {
+        return search(root, data);
+    }
+
+    boolean search(Node<T> root, T data) {
+        if (root == null) {
+            return false;
+        } else if (data.compareTo(root.data) > 0) {
+            return search(root.right, data);
+        } else if (data.compareTo(root.data) < 0) {
+            return search(root.left, data);
+        } else {
+            return true;
+        }
+    }
+
+    public Node<T> getRoot() {
+        return root;
+    }
+
+    public void setRoot(Node<T> root) {
+        this.root = root;
+    }
+
+    void inOrder(Node<T> root) {//O(n)
+        if (root == null) {
+            return;
+        }
+        inOrder(root.left);
+        System.out.print(root.data + " , ");
+        inOrder(root.right);
+    }
+
+    public int height(Node<T> root) {
+        if (root == null) {
+            return -1;
+        } else {
+            return 1 + Math.max(height(root.left), height(root.right));
+        }
+    }
+
+    public int countNode(Node<T> root) {
+        if (root == null) {
+            return 0;
+        }
+        return 1 + countNode(root.left) + countNode(root.right);
+    }
+
+    private boolean isLeaf(Node<T> root) {
+        return root.left == null && root.right == null;
+    }
+
+    private boolean isParent(Node<T> root) {
+        return root.left != null || root.right != null;
+
+    }
+
+    public void printLeaf(Node<T> root) {
+        if (root == null) {
+        } else {
+            if (isLeaf(root)) {
+                System.out.print(root.data + "  ");
+            }
+            printLeaf(root.left);
+            printLeaf(root.right);
+        }
+    }
+
+    public T minElement(Node<T> root) {
+        if(root == null){
+            return null;
+        }
+        if (root.left == null) {
+            return root.data;
+        } else {
+            return minElement(root.left);
+        }
+    }
+
+    public T maxElement(Node<T> root) {
+        if(root == null){
+            return null;
+        }
+        else if (root.right == null) {
+            return root.data;
+        } else {
+            return minElement(root.right);
+        }
+    }
+
+    public static void main(String[] args) {
+        BST<Integer> t = new BST<>();
+        t.add(5);
+        t.add(10);
+        t.add(9);
+        t.add(1);
+        System.out.println(t.isCom());
+        //System.out.println(t.maxElement(t.getRoot()));
+        //System.out.println(t.countNode(t.getRoot()));
+    }
+    public boolean isCom(){
+        boolean notPer = false;
+        if(root == null){
+            return false;
+        }else{
+           for(int i = 1 ; i <= height(root);i++){
+                if (isComH(root,i) != (int) Math.pow(2, i)){
+                    notPer = true;
+                }
+                if(notPer && i == height(root)){
+                    if(!(isComH1(root,i,root) >= isComH2(root,i,root)) ){
+                        return false;
+                    }
+                }else if(notPer && i != height(root)){
+                    return false;
+                }
+           } 
+           return true;
+        }
+    }
+    private int isComH(Node<T> root, int level) {
+        if(root == null){
+            return 0;
+        }
+        if(level == 0){
+            return 1;
+        }
+        else if(level > 0){
+            return isComH(root.left,level - 1) + isComH(root.right,level - 1);
+        }else{
+            return 0;
+        }
+    }
+    private int isComH1(Node<T> root, int level,Node<T> par) {
+        if(root == null){
+            return 0;
+        }
+        if(level == 0){
+            if(par.left == root){
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+        else if(level > 0){
+            return isComH1(root.left,level - 1,root) + isComH1(root.right,level - 1,root);
+        }else{
+            return 0;
+        }
+    }
+    private int isComH2(Node<T> root, int level,Node<T> par) {
+        if(root == null){
+            return 0;
+        }
+        if(level == 0){
+            if(par.right == root){
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+        else if(level > 0){
+            return isComH2(root.left,level - 1,root) + isComH2(root.right,level - 1,root);
+        }else{
+            return 0;
+        }
+    }
+}
