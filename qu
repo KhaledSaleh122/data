@@ -1,0 +1,35 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package trainmed;
+
+import java.util.LinkedList;
+
+/**
+ *
+ * @author khale
+ */
+public class MLinkedQueue extends LinkedList<Integer>{
+    LinkedList<Integer> s = new LinkedList<>();
+    public void enqueue(int v){
+        s.addLast(v);
+    }
+    public void enqueueX(int x,int v){
+        s.add(x,v);
+    }
+    public int dequeue(){
+        return s.removeFirst();
+    }
+    public int size(){
+        return s.size();
+    }
+    public void print() {
+        for(int i = 0 ; i < s.size();i++){
+            System.out.print(s.get(i)+" , ");
+        }
+        System.out.println("");
+    }
+    
+}
